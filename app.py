@@ -261,17 +261,17 @@ with dashboard_tab:
 
     st.subheader("Survival by Passenger Class")
 
-    class_df = read_query(
-        """
-        SELECT
-            pclass,
-            survived,
-            COUNT(*) AS passenger_count
-        FROM titanic_project.passengers
-        GROUP BY pclass, survived
-        ORDER BY pclass, survived
-        """
-    )
+   class_df = read_query(
+    """
+    SELECT
+        "Pclass" AS pclass,
+        COUNT(*) AS passenger_count
+    FROM titanic_project.passengers
+    GROUP BY "Pclass"
+    ORDER BY "Pclass"
+    """
+)
+    
 
     class_pivot = class_df.pivot(
         index="pclass",
