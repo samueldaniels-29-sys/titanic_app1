@@ -211,15 +211,15 @@ with dashboard_tab:
     )
 
     survivor_df = read_query(
-        """
-        SELECT
-            survived,
-            COUNT(*) AS passenger_count
-        FROM titanic_project.passengers
-        GROUP BY survived
-        ORDER BY survived
-        """
-    )
+    """
+    SELECT
+        "Survived" AS survived,
+        COUNT(*) AS passenger_count
+    FROM titanic_project.passengers
+    GROUP BY "Survived"
+    ORDER BY "Survived"
+    """
+)
 
     survived_count = 0
     not_survived_count = 0
