@@ -224,16 +224,16 @@ with dashboard_tab:
     count_df.iloc[0]["total_passengers"]
     )
 
-    survivor_df = read_query(
+survivor_df = read_query(
     """
     SELECT
-    survived,
-    COUNT(*) AS passenger_count
+        "Survived" AS survived,
+        COUNT(*) AS passenger_count
     FROM titanic_project.passengers
-    GROUP BY survived
-    ORDER BY survived
+    GROUP BY "Survived"
+    ORDER BY "Survived"
     """
-    )
+)
 
     survived_count = 0
     not_survived_count = 0
