@@ -261,7 +261,7 @@ with dashboard_tab:
 
     st.subheader("Survival by Passenger Class")
 
-   class_df = read_query(
+class_df = read_query(
     """
     SELECT
         "Pclass" AS pclass,
