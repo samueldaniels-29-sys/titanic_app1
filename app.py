@@ -213,11 +213,11 @@ with dashboard_tab:
     survivor_df = read_query(
     """
     SELECT
-    survived,
+    "Survived" AS survived,
     COUNT(*) AS passenger_count
     FROM titanic_project.passengers
-    GROUP BY survived
-    ORDER BY survived
+    GROUP BY "Survived"
+    ORDER BY "Survived"
     """
     )
 
@@ -264,12 +264,12 @@ with dashboard_tab:
     class_df = read_query(
     """
     SELECT
-    pclass,
-    survived,
+    "Pclass" AS pclass,
+    "Survived" AS survived,
     COUNT(*) AS passenger_count
     FROM titanic_project.passengers
-    GROUP BY pclass, survived
-    ORDER BY pclass, survived
+    GROUP BY "Pclass", "Survived"
+    ORDER BY "Pclass", "Survived"
     """
     )
 
@@ -299,12 +299,12 @@ with dashboard_tab:
     sex_df = read_query(
     """
     SELECT
-    sex,
-    survived,
+    "Sex" AS sex,
+    "Survived" AS survived,
     COUNT(*) AS passenger_count
     FROM titanic_project.passengers
-    GROUP BY sex, survived
-    ORDER BY sex, survived
+    GROUP BY "Sex", "Survived"
+    ORDER BY "Sex", "Survived"
     """
     )
 
@@ -328,9 +328,9 @@ with dashboard_tab:
     missing_df = read_query(
     """
     SELECT
-    COUNT(*) - COUNT(age) AS missing_age,
-    COUNT(*) - COUNT(embarked) AS missing_embarked,
-    COUNT(*) - COUNT(cabin) AS missing_cabin
+    COUNT(*) - COUNT("Age") AS missing_age,
+    COUNT(*) - COUNT("Embarked") AS missing_embarked,
+    COUNT(*) - COUNT("Cabin") AS missing_cabin
     FROM titanic_project.passengers
     """
     )
@@ -405,24 +405,24 @@ with explorer_tab:
 
             query = """
             SELECT
-            passenger_id,
-            name,
-            sex,
-            age,
-            sibsp,
-            parch,
-            embarked,
-            ticket,
-            fare,
-            cabin,
-            pclass,
-            survived
+            "PassengerId" AS passenger_id,
+            "Name" AS name,
+            "Sex" AS sex,
+            "Age" AS age,
+            "SibSp" AS sibsp,
+            "Parch" AS parch,
+            "Embarked" AS embarked,
+            "Ticket" AS ticket,
+            "Fare" AS fare,
+            "Cabin" AS cabin,
+            "Pclass" AS pclass,
+            "Survived" AS survived
             FROM titanic_project.passengers
             WHERE
-            pclass = ANY(%s)
-            AND sex = ANY(%s)
-            AND survived = ANY(%s)
-            ORDER BY passenger_id
+            "Pclass" = ANY(%s)
+            AND "Sex" = ANY(%s)
+            AND "Survived" = ANY(%s)
+            ORDER BY "PassengerId"
             LIMIT %s
             """
 
@@ -462,25 +462,6 @@ with explorer_tab:
 
     st.divider()
 
-    st.subheader("Original Staging Data")
-
-    if st.button("Load Staging Table Preview"):
-
-        staging_df = read_query(
-        """
-        SELECT *
-        FROM titanic_project.titanic_staging
-        ORDER BY passengerid
-        LIMIT 20
-        """
-        )
-
-        st.dataframe(
-        staging_df,
-        use_container_width=True,
-        hide_index=True
-        )
-
 
 # =========================================================
 # TAB 3: SQL LAB
@@ -514,59 +495,59 @@ with sql_tab:
 
     "Survival distribution": """
     SELECT
-    survived,
+    "Survived" AS survived,
     COUNT(*) AS passenger_count
     FROM titanic_project.passengers
-    GROUP BY survived
-    ORDER BY survived
+    GROUP BY "Survived"
+    ORDER BY "Survived"
     """,
 
     "Average age by class": """
     SELECT
-    pclass,
-    ROUND(AVG(age)::numeric, 2) AS average_age
+    "Pclass" AS pclass,
+    ROUND(AVG("Age")::numeric, 2) AS average_age
     FROM titanic_project.passengers
-    GROUP BY pclass
-    ORDER BY pclass
+    GROUP BY "Pclass"
+    ORDER BY "Pclass"
     """,
 
     "Survival rate by sex": """
     SELECT
-    sex,
+    "Sex" AS sex,
     COUNT(*) AS total_passengers,
-    SUM(survived) AS survivors,
+    SUM("Survived") AS survivors,
     ROUND(
-    100.0 * SUM(survived) / COUNT(*),
+    100.0 * SUM("Survived") / COUNT(*),
     2
     ) AS survival_percentage
     FROM titanic_project.passengers
-    GROUP BY sex
-    ORDER BY sex
+    GROUP BY "Sex"
+    ORDER BY "Sex"
     """,
 
     "Passengers with missing ages": """
     SELECT
-    passenger_id,
-    name,
-    sex,
-    age,
-    pclass
+    "PassengerId" AS passenger_id,
+    "Name" AS name,
+    "Sex" AS sex,
+    "Age" AS age,
+    "Pclass" AS pclass
     FROM titanic_project.passengers
-    WHERE age IS NULL
-    ORDER BY passenger_id
+    WHERE "Age" IS NULL
+    ORDER BY "PassengerId"
     LIMIT 50
     """,
 
     "Fare statistics by class": """
     SELECT
-    pclass,
+    "Pclass" AS pclass,
     COUNT(*) AS passenger_count,
-    ROUND(AVG(fare)::numeric, 2) AS average_fare,
-    ROUND(MIN(fare)::numeric, 2) AS minimum_fare,
-    ROUND(MAX(fare)::numeric, 2) AS maximum_fare
+    ROUND(AVG("Fare")::numeric, 2) AS average_fare,
+    ROUND(MIN("Fare")::numeric, 2) AS minimum_fare,
+    ROUND(MAX("Fare")::numeric, 2) AS maximum_fare
     FROM titanic_project.passengers
-    GROUP BY pclass
-    ORDER BY pclass
+    GROUP BY "Pclass"
+    ORDER BY "Pclass"
     """
     }
 
