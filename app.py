@@ -12,7 +12,7 @@ import streamlit as st
 
 st.set_page_config(
 page_title="Titanic PostgreSQL Learning App",
-page_icon="🚢",
+page_icon="",
 layout="wide"
 )
 
@@ -33,20 +33,6 @@ def get_db_config():
     """
 
     try:
-        if "PGHOST" in st.secrets:
-            config = {
-                "host": st.secrets["PGHOST"],
-                "port": int(st.secrets.get("PGPORT", 5432)),
-                "dbname": st.secrets["PGDATABASE"],
-                "user": st.secrets["PGUSER"],
-                "password": st.secrets["PGPASSWORD"],
-            }
-
-            if "PGSSLMODE" in st.secrets:
-                config["sslmode"] = st.secrets["PGSSLMODE"]
-
-            return config
-
         db = st.secrets["db"]
 
         config = {
@@ -224,16 +210,16 @@ with dashboard_tab:
     count_df.iloc[0]["total_passengers"]
     )
 
-survivor_df = read_query(
+    survivor_df = read_query(
     """
     SELECT
-        "Survived" AS survived,
-        COUNT(*) AS passenger_count
+    survived,
+    COUNT(*) AS passenger_count
     FROM titanic_project.passengers
-    GROUP BY "Survived"
-    ORDER BY "Survived"
+    GROUP BY survived
+    ORDER BY survived
     """
-)
+    )
 
     survived_count = 0
     not_survived_count = 0
@@ -419,7 +405,7 @@ with explorer_tab:
 
             query = """
             SELECT
-            passengerid,
+            passenger_id,
             name,
             sex,
             age,
@@ -436,7 +422,7 @@ with explorer_tab:
             pclass = ANY(%s)
             AND sex = ANY(%s)
             AND survived = ANY(%s)
-            ORDER BY passengerid
+            ORDER BY passenger_id
             LIMIT %s
             """
 
@@ -560,14 +546,14 @@ with sql_tab:
 
     "Passengers with missing ages": """
     SELECT
-    passengerid,
+    passenger_id,
     name,
     sex,
     age,
     pclass
     FROM titanic_project.passengers
     WHERE age IS NULL
-    ORDER BY passengerid
+    ORDER BY passenger_id
     LIMIT 50
     """,
 
